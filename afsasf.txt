@@ -1,0 +1,79 @@
+module instdecoder (Clk,I_dataInst,enable,opcode,rDadrs,rAadrs,rBadrs,imm,flag);
+input[15:0] I_dataInst;
+input Clk;
+input enable;
+output[3:0] opcode;
+output[2:0] rDadrs;
+output[2:0] rAadrs;
+output[2:0] rBadrs;
+output[7:0] imm;
+output reg flag;
+
+reg[3:0] opcode;
+reg[2:0] rDadrs;
+reg[2:0] rAadrs;
+reg[2:0] rBadrs;
+reg[7:0] imm;
+
+always@(posedge Clk) begin 
+opcode <= I_dataInst[15:12];
+   if(enable==1)begin
+      if(I_dataInst[15:12]==1) 
+        begin
+              opcode <= I_dataInst[15:12];
+              rDadrs <= I_dataInst[11:9];
+              rAadrs <= I_dataInst[7:5];
+              imm <= 8'bxxxxxxxx;
+              rBadrs <= 3'bxxx;
+              flag <= I_dataInst[8];
+          end
+ 
+       else if(I_dataInst[15:12]==2) 
+        begin
+              opcode <= I_dataInst[15:12];
+              rBadrs <= I_dataInst[4:2];
+              rAadrs <= I_dataInst[7:5];
+              rDadrs <= 3'bxxx;
+              imm <= 8'bxxxxxxxx;
+              flag<=I_dataInst[8];
+        end
+       else if(I_dataInst[15:12]==3) 
+        begin
+              opcode <= I_dataInst[15:12];
+              rDadrs <= I_dataInst[11:9];
+              rAadrs <= 3'bxxx;
+              rBadrs <= 3'bxxx;
+              imm <= I_dataInst[7:0];
+              flag <= I_dataInst[8];
+        end
+       else if(I_dataInst[15:12]==5) 
+        begin
+              rAadrs <= 3'bxxx;
+              rBadrs <= 3'bxxx;
+              rDadrs <= 3'bxxx;
+              opcode <= I_dataInst[15:12];
+              imm <= I_dataInst[7:0];
+              flag <= I_dataInst[8];
+        end
+else if(I_dataInst[15:12]==11) 
+begin
+              opcode <= I_dataInst[15:12];
+              rBadrs <= I_dataInst[4:2];
+              rAadrs <= I_dataInst[7:5];
+              rDadrs <= 3'bxxx;
+              imm <= 8'bxxxxxxxx;
+              flag <= I_dataInst[8];
+              end
+else 
+begin 
+                  rAadrs <= I_dataInst[7:5];
+                  rBadrs <= I_dataInst[4:2];
+                  rDadrs <= I_dataInst[11:9];
+                  opcode <= I_dataInst[15:12];
+                  flag <= I_dataInst[8];
+                  imm <= 8'bxxxxxxxx;
+                  end
+
+end
+end
+endmodule

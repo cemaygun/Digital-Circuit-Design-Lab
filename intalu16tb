@@ -1,0 +1,62 @@
+module intalu16tb;
+
+reg[15:0] a,b;
+
+reg[3:0] opcode;
+
+wire[15:0] z;
+
+initial
+$monitor ("a=%b, b=%b, opcode=%b, z=%b,flag=%b",
+a, b, opcode, z,flag);
+initial
+begin
+//add operation
+#0  a=100; b=1; opcode=0;
+//subtract operation
+#10 a=55; b=44; opcode=10;
+//xor operation
+#10 a=57347; b=41249; opcode=4;
+//or operation
+#10 a=555; b=556; opcode=5;
+
+//and operation
+#10 a=57363; b=41265; opcode=7;
+//iseq operation
+#10 a=57363; b=57363; opcode=8;
+
+//isneq operation
+#10 a=57363; b=57366; opcode=9;
+
+//uslop operation
+#10 a=56; b=99; opcode=14;
+
+//usgeop operation
+#10 a=22; b=20; opcode=15;
+
+//slop operation
+#10 a=-15; b=-12; opcode=12;
+
+//sgop operation
+#10 a=-12; b=-15; opcode=13;
+
+//otherwise operation
+#10 a=-12; b=-15; opcode=1;
+
+//otherwise operation
+#10 a=-12; b=-15; opcode=11;
+
+//sgop operation
+#10 a=-12; b=-15; opcode=13;
+
+#10 $stop;
+end
+
+intalu16 inst1 (
+.a(a),
+.b(b),
+.opcode(opcode),
+.z(z),
+.flag(flag)
+);
+endmodule

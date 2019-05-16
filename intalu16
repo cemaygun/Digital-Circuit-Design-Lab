@@ -1,0 +1,48 @@
+module intalu16 (a,b,opcode,z,flag);
+input [15:0] a,b;
+
+input[3:0] opcode;
+
+output[15:0] z;
+
+output reg flag;
+wire[15:0] a,b;
+wire[3:0] opcode;
+reg[15:0] z;
+integer x,y,out;
+parameter addop=0,
+          subop=10,
+          xorop=4,
+          orop=6,
+          andop=7,
+          iseqop=8,
+          isneqop=9,
+          slop=12,
+          sgeop=13,
+          uslop=14,
+          usgop=15,
+          otherwise=1||2||3||5||11;
+always @(a or b or opcode,flag)
+begin 
+   
+   case(opcode)
+         addop:z=a+b;
+              
+         subop:z=a-b;
+
+         andop:z=a&b;
+
+         orop:z=a|b;
+      
+         xorop:z=a^b;
+         iseqop:z=(a==b)?1:z;
+         isneqop:z=(a!=b)?1:z;
+         slop:z=(a>=b)?1:z;
+         sgeop:z=(a<b)?1:z;
+         uslop:z=($signed(a) < $signed(b))?1:z;
+         usgop:z=($signed(a) >= $signed(b))?1:z;
+         otherwise:z=1;
+   endcase
+         flag=(z==0)?1:0;
+end
+endmodule

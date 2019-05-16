@@ -1,0 +1,45 @@
+module alu4 (a,b,opcode,z,flag);
+input [15:0] a,b;
+input[3:0] opcode;
+output[15:0] z;
+output reg flag;
+wire[15:0] a,b;
+wire[3:0] opcode;
+reg[15:0] z;
+integer x,y,out;
+parameter addop=4'b0000,
+          subop=4'b1010,
+          xorop=4'b0100,
+          orop=4'b0110,
+          andop=4'b0111,
+          iseqop=4'b1000,
+          isneqop=4'b1001,
+          slop=4'b1100,
+          sgeop=4'b1101,
+          uslop=4'b1110,
+          usgop=4'b1111,
+          otherwise=4'b0001||4'b0010||4'b0011||4'b1011;
+always @(a or b or opcode,flag)
+begin 
+   
+   case(opcode)
+         addop:z=a+b;
+              
+         subop:z=a-b;
+
+         andop:z=a&b;
+
+         orop:z=a|b;
+      
+         xorop:z=a^b;
+         iseqop:z=(a==b)?16'b0000000000000001:z;
+         isneqop:z=(a!=b)?16'b0000000000000001:z;
+         slop:z=(a>=b)?16'b0000000000000001:z;
+         sgeop:z=(a<b)?16'b0000000000000001:z;
+         uslop:z=($signed(a) < $signed(b))?16'b0000000000000001:z;
+         usgop:z=($signed(a) >= $signed(b))?16'b0000000000000001:z;
+         otherwise:z=16'b0000000000000000;
+   endcase
+         flag=(z==16'b0000000000000000)?1:0;
+end
+endmodule

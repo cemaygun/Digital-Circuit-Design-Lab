@@ -1,0 +1,35 @@
+module regftb();
+reg Clk;
+reg enable;
+reg[2:0] rDadrs;
+reg[2:0] rAadrs;
+reg[2:0] rBadrs;
+reg[15:0] rD;
+reg wrenable; 
+wire [15:0] rA; 
+wire [15:0] rB;
+reg [15:0] registers[0:7];
+ always begin
+   #5  Clk = ~Clk; // Toggle clock every 5 ticks
+ end
+ initial begin
+    // 1. Initialize testbench variables to 0 at start of simulation
+    Clk <= 0;
+    
+    // 2. Drive rest of the stimulus, reset is asserted in between
+    #20   rDadrs=3'b001;rD<=16'b0010100000111111; wrenable<=1;enable<=0; 
+ #40   rDadrs=3'b101;rD<=16'b1010100000111111; wrenable<=1;enable<=0; 
+fork
+  #60    rAadrs<=3'b001; enable<=1;  
+  #60    rBadrs<=3'b001; enable<=1;                                
+  join
+fork
+  #90    rAadrs<=3'b101; enable<=1;  
+  #90    rBadrs<=3'b101; enable<=1;                                
+  join
+    #40 $finish;
+  end
+
+register_file register_file (enable,Clk, rAadrs,rBadrs,rDadrs,rD,rA,wrenable,rB);
+ 
+endmodule

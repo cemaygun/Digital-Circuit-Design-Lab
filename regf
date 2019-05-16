@@ -1,0 +1,33 @@
+module register_file(enable,Clk, rAadrs,rBadrs,rDadrs,rD,rA,wrenable,rB);  
+    input enable;
+    input Clk; 
+    input [2:0] rAadrs;
+    input [2:0] rBadrs;
+    input [2:0] rDadrs;
+    input [15:0] rD;
+    input wrenable; 
+    output reg  [15:0] rA; 
+    output reg [15:0] rB;
+	
+   reg [15:0] registers[0:7];
+  always @ (posedge Clk) 
+        
+        begin
+                  if (enable == 1) 
+                      begin
+	         	rA <= registers[rAadrs];
+		
+	
+	               
+			//Output value requested in second read register
+			rB <= registers[rBadrs];
+		
+               end
+        
+			if (wrenable==1)//Write only if write flag enabled and target is not register 0.
+				begin
+					//Store input data to 
+					registers[rDadrs]<= rD;
+			end
+                    end
+endmodule

@@ -1,0 +1,27 @@
+module instdectb();
+reg Clk;
+reg[15:0] I_dataInst;
+reg enable;
+wire[3:0] opcode;
+wire[2:0] rDadrs;
+wire[2:0] rAadrs;
+wire[2:0] rBadrs;
+wire[7:0] imm;
+wire flag;
+ always begin
+   #5  Clk = ~Clk; // Toggle clock every 5 ticks
+ end
+ initial begin
+    // 1. Initialize testbench variables to 0 at start of simulation
+    Clk <= 0;
+    
+    // 2. Drive rest of the stimulus, reset is asserted in between
+    #20   I_dataInst<=16'b0011101010101010; enable<=1;                   
+    #80   I_dataInst<=16'b0101111111101010; enable<=1;               
+  
+    #40 $finish;
+  end
+
+instdecoder U_decoder (Clk,I_dataInst,enable,opcode,rDadrs,rAadrs,rBadrs,imm,flag);
+ 
+endmodule
